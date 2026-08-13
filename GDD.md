@@ -25,14 +25,14 @@
 
 | Acción | Input (PC) |
 | ----- | ----- |
-| Movimiento Horizontal | W/A/S/D |
+| Movimiento | W/A/S/D |
 | Saltar / Doble Salto | Barra espaciadora |
-| Correr | Shift (Toggle o Mantener) |
-| Agacharse | C (al caminar) |
-| Deslizarse | C (al correr) |
-| Dash | Ctrl |
-| Grapple / Gancho | Q (mantener para engancharse y balancearse; C para recoger la cuerda) |
-| Disparar | Click Izquierdo del ratón |
+| Agacharse / Deslizarse | Ctrl o C |
+| Volar | F |
+| Dash | Click derecho del ratón |
+| Grapple / Gancho | Click izquierdo del ratón |
+| Zoom | Z |
+| Liberar o recuperar el ratón | Esc |
 
 ### **1.4 Objetivos del Jugador**
 
@@ -66,7 +66,8 @@
 
 ### **2.2 Ranking Competitivo**
 
-* Antes de comenzar cada nivel, el jugador ingresa su nombre. Al terminar cada nivel, se muestra tu tiempo y un ranking con los mejores tiempos alcanzados y el nombre de los respectivos jugadores. El ranking es local de la computadora y persistente. Si un jugador hace varios intentos con el mismo nombre, en el ranking solo se guardará el menor tiempo alcanzado por dicho jugador.
+* Antes de comenzar cada nivel, el jugador ingresara su nombre. Al terminar cada nivel, se mostrara su tiempo y un ranking con los mejores tiempos y los nombres correspondientes. El ranking sera local y persistente. Si un jugador hace varios intentos con el mismo nombre, solo se guardara su menor tiempo.
+* Estado actual: el menu de ranking lee `user://ranking.json`; la pantalla de victoria usa tres tiempos mockup y el guardado desde el gameplay aun no esta conectado.
 
 ---
 
@@ -84,9 +85,10 @@
 
 ### **5.2 UI/UX**
 
-* **Menús:** (wireframe o descripción)  
+* **Menús:** menu principal, controles, creditos, ranking, victoria y derrota.
 * **Estilo:** Pantalla interactiva tipo **"Consola de DJ"**   
-* **Diseño:** Botones mínimos y angulares en azul neón sobre fondo oscuro. Al pasar el cursor por las opciones, se activan pequeñas barras de ecualizador que reaccionan al audio de fondo.   
+* **Diseño planeado:** Botones mínimos y angulares en azul neón sobre fondo oscuro.
+* **Estado actual:** menus funcionales con controles y texto plano para priorizar el flujo de juego.
 * **HUD durante gameplay:**
 
 ### **5.3 Audio**
@@ -101,9 +103,9 @@
 
 ### **6.1 Menús**
 
-* **Menú principal:**  
-* **Menú de pausa:**  
-* **Configuración:**
+* **Menú principal:** Jugar, controles, ranking, creditos y salir.
+* **Menú de pausa:** Pendiente.
+* **Configuración:** Pendiente.
 
 ### **6.2 HUD**
 
@@ -111,7 +113,7 @@
 
 ### **6.3 Flujo de Pantallas**
 
-> Flowchart de navegación entre pantallas (adjuntar imagen o describir con flechas: Pantalla A → Pantalla B).
+> Menu principal -> Gameplay -> Victoria o Derrota. El menu principal tambien permite abrir Controles, Ranking y Creditos.
 
 ---
 
@@ -127,6 +129,6 @@
 
 ### **7.4 Sistema de Guardado**
 
-* Sistema de guardado local.  
+* Sistema de guardado local planeado.
 * **Qué se guarda:**  
-  * Nombres y tiempos en el ranking
+  * Nombres y tiempos en el ranking, mediante `user://ranking.json`

@@ -1,0 +1,40 @@
+[gd_scene format=3 uid="uid://cew4nx8g13ydj"]
+
+[ext_resource type="Script" uid="uid://ddgke2ado0kfy" path="res://Menu/defeat_menu.gd" id="1_defeat"]
+
+[node name="DefeatMenu" type="Control" unique_id=988175854]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_defeat")
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=1454968003]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Content" type="VBoxContainer" parent="CenterContainer" unique_id=1442147177]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="CenterContainer/Content" unique_id=855672283]
+layout_mode = 2
+text = "DERROTA"
+horizontal_alignment = 1
+
+[node name="RetryButton" type="Button" parent="CenterContainer/Content" unique_id=729306141]
+layout_mode = 2
+text = "REINTENTAR"
+
+[node name="MainMenuButton" type="Button" parent="CenterContainer/Content" unique_id=1981469978]
+layout_mode = 2
+text = "MENU PRINCIPAL"
+
+[connection signal="pressed" from="CenterContainer/Content/RetryButton" to="." method="_on_retry_button_pressed"]
+[connection signal="pressed" from="CenterContainer/Content/MainMenuButton" to="." method="_on_main_menu_button_pressed"]

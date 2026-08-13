@@ -1,0 +1,129 @@
+[gd_scene format=3 uid="uid://bthavpq460a5g"]
+
+[ext_resource type="Script" uid="uid://b6454lhkyg7m6" path="res://Menu/main_menu.gd" id="1_menu"]
+
+[node name="MainMenu" type="Control" unique_id=2094304090]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_menu")
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=1372543830]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MainPanel" type="VBoxContainer" parent="CenterContainer" unique_id=138982163]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="CenterContainer/MainPanel" unique_id=54201097]
+layout_mode = 2
+text = "SPEED RUNNER"
+horizontal_alignment = 1
+
+[node name="PlayButton" type="Button" parent="CenterContainer/MainPanel" unique_id=1489804050]
+unique_name_in_owner = true
+layout_mode = 2
+text = "JUGAR"
+
+[node name="ControlsButton" type="Button" parent="CenterContainer/MainPanel" unique_id=1933248633]
+unique_name_in_owner = true
+layout_mode = 2
+text = "CONTROLES"
+
+[node name="RankingButton" type="Button" parent="CenterContainer/MainPanel" unique_id=1755442967]
+layout_mode = 2
+text = "RANKING"
+
+[node name="CreditsButton" type="Button" parent="CenterContainer/MainPanel" unique_id=1446316193]
+unique_name_in_owner = true
+layout_mode = 2
+text = "CREDITOS"
+
+[node name="QuitButton" type="Button" parent="CenterContainer/MainPanel" unique_id=1543756394]
+layout_mode = 2
+text = "SALIR"
+
+[node name="ControlsPanel" type="VBoxContainer" parent="CenterContainer" unique_id=839597620]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="ControlsText" type="Label" parent="CenterContainer/ControlsPanel" unique_id=1841995631]
+layout_mode = 2
+text = "WASD: mover
+SPACE: saltar
+SHIFT: correr
+C: agacharse / deslizarse
+CTRL: dash
+Q: grapple
+Click izquierdo: disparar"
+horizontal_alignment = 1
+
+[node name="ControlsBackButton" type="Button" parent="CenterContainer/ControlsPanel" unique_id=394723596]
+unique_name_in_owner = true
+layout_mode = 2
+text = "VOLVER"
+
+[node name="CreditsPanel" type="VBoxContainer" parent="CenterContainer" unique_id=598778745]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="CreditsText" type="Label" parent="CenterContainer/CreditsPanel" unique_id=1322600530]
+layout_mode = 2
+text = "SPEED-RUNNER
+JULIÁN MEYER
+SEAN RON"
+horizontal_alignment = 1
+
+[node name="CreditsBackButton" type="Button" parent="CenterContainer/CreditsPanel" unique_id=2015075829]
+unique_name_in_owner = true
+layout_mode = 2
+text = "VOLVER"
+
+[node name="NamePanel" type="VBoxContainer" parent="CenterContainer" unique_id=1303060531]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="NameText" type="Label" parent="CenterContainer/NamePanel" unique_id=1082124689]
+layout_mode = 2
+text = "INGRESE SU NOMBRE"
+horizontal_alignment = 1
+
+[node name="NameInput" type="LineEdit" parent="CenterContainer/NamePanel" unique_id=1178693342]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "Nombre"
+alignment = 1
+max_length = 20
+
+[node name="ErrorMessage" type="Label" parent="CenterContainer/NamePanel" unique_id=7278508]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+text = "nombre inválido"
+horizontal_alignment = 1
+
+[node name="StartButton" type="Button" parent="CenterContainer/NamePanel" unique_id=1156629291]
+unique_name_in_owner = true
+layout_mode = 2
+text = "INICIAR"
+
+[connection signal="pressed" from="CenterContainer/MainPanel/PlayButton" to="." method="_on_play_button_pressed"]
+[connection signal="pressed" from="CenterContainer/MainPanel/ControlsButton" to="." method="_on_controls_button_pressed"]
+[connection signal="pressed" from="CenterContainer/MainPanel/RankingButton" to="." method="_on_ranking_button_pressed"]
+[connection signal="pressed" from="CenterContainer/MainPanel/CreditsButton" to="." method="_on_credits_button_pressed"]
+[connection signal="pressed" from="CenterContainer/MainPanel/QuitButton" to="." method="_on_quit_button_pressed"]
+[connection signal="pressed" from="CenterContainer/ControlsPanel/ControlsBackButton" to="." method="_on_controls_back_button_pressed"]
+[connection signal="pressed" from="CenterContainer/CreditsPanel/CreditsBackButton" to="." method="_on_credits_back_button_pressed"]
+[connection signal="pressed" from="CenterContainer/NamePanel/StartButton" to="." method="_on_accept_button_pressed"]

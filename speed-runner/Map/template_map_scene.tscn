@@ -54,6 +54,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26.7646, 1.50542, -19.959)
 
 [node name="PlayerCharacter" parent="PlayerCharacter" unique_id=1631114635 instance=ExtResource("1_t5rch")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.8408585, 0)
+grapple_max_distance = 30.0
 
 [node name="Map" type="Node3D" parent="." unique_id=270084263]
 
@@ -381,11 +382,16 @@ path_joined = false
 material = ExtResource("4_ivwfa")
 
 [node name="CSGBox3D11" type="CSGBox3D" parent="Map" unique_id=2032733094]
-transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 51.64446, 24.984247, -49.834415)
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 51.64446, 30.621695, -49.834415)
 use_collision = true
 collision_mask = 2
 
 [node name="CSGBox3D12" type="CSGBox3D" parent="Map" unique_id=1076001817]
-transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 51.64446, 24.984247, -106.84657)
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 51.64446, 35.391045, -106.84657)
+use_collision = true
+collision_mask = 2
+
+[node name="CSGBox3D13" type="CSGBox3D" parent="Map" unique_id=93790741]
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 51.644, 40.548958, -156.847)
 use_collision = true
 collision_mask = 2

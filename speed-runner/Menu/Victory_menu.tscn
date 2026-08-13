@@ -1,0 +1,120 @@
+[gd_scene format=3 uid="uid://rlbcxtwghexn"]
+
+[ext_resource type="Script" uid="uid://dxyc7vl2whpjl" path="res://Menu/victory_menu.gd" id="1_victory"]
+
+[node name="VictoryMenu" type="Control" unique_id=1499654867]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_victory")
+
+[node name="Content" type="VBoxContainer" parent="." unique_id=97599458]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -150.0
+offset_top = -100.0
+offset_right = 150.0
+offset_bottom = 100.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="Content" unique_id=1973331398]
+layout_mode = 2
+text = "VICTORIA"
+horizontal_alignment = 1
+
+[node name="PersonalTime" type="HBoxContainer" parent="Content" unique_id=2097791269]
+layout_mode = 2
+alignment = 1
+
+[node name="PersonalTimeText" type="Label" parent="Content/PersonalTime" unique_id=2116002418]
+layout_mode = 2
+text = "Tu tiempo es de:"
+horizontal_alignment = 1
+
+[node name="Time" type="Label" parent="Content/PersonalTime" unique_id=825848702]
+layout_mode = 2
+text = "00:00:00"
+horizontal_alignment = 1
+
+[node name="Ranking" type="VBoxContainer" parent="Content" unique_id=1264388118]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Rank1" type="HBoxContainer" parent="Content/Ranking" unique_id=847760655]
+layout_mode = 2
+
+[node name="RankNumber" type="Label" parent="Content/Ranking/Rank1" unique_id=1689729651]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "1."
+
+[node name="PlayerName" type="Label" parent="Content/Ranking/Rank1" unique_id=599327879]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="Time" type="Label" parent="Content/Ranking/Rank1" unique_id=1855014149]
+layout_mode = 2
+size_flags_horizontal = 10
+text = "0:00:00"
+horizontal_alignment = 2
+
+[node name="Rank2" type="HBoxContainer" parent="Content/Ranking" unique_id=1598986588]
+layout_mode = 2
+
+[node name="RankNumber" type="Label" parent="Content/Ranking/Rank2" unique_id=1869686954]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "2."
+
+[node name="PlayerName" type="Label" parent="Content/Ranking/Rank2" unique_id=956236906]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="Time" type="Label" parent="Content/Ranking/Rank2" unique_id=792235731]
+layout_mode = 2
+size_flags_horizontal = 10
+text = "0:00:00"
+horizontal_alignment = 2
+
+[node name="Rank3" type="HBoxContainer" parent="Content/Ranking" unique_id=1149358843]
+layout_mode = 2
+
+[node name="RankNumber" type="Label" parent="Content/Ranking/Rank3" unique_id=509745103]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "3."
+
+[node name="PlayerName" type="Label" parent="Content/Ranking/Rank3" unique_id=1039675900]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="Time" type="Label" parent="Content/Ranking/Rank3" unique_id=18399321]
+layout_mode = 2
+size_flags_horizontal = 10
+text = "0:00:00"
+horizontal_alignment = 2
+
+[node name="RankingButton" type="Button" parent="Content/Ranking" unique_id=1384274825]
+layout_mode = 2
+text = "VER RANKING COMPLETO"
+
+[node name="RetryButton" type="Button" parent="Content" unique_id=1805988997]
+layout_mode = 2
+text = "REINTENTAR"
+
+[node name="MainMenuButton" type="Button" parent="Content" unique_id=1106842184]
+layout_mode = 2
+text = "MENU PRINCIPAL"
+
+[connection signal="pressed" from="Content/Ranking/RankingButton" to="." method="_on_ranking_button_pressed"]
+[connection signal="pressed" from="Content/RetryButton" to="." method="_on_next_level_button_pressed"]
+[connection signal="pressed" from="Content/MainMenuButton" to="." method="_on_main_menu_button_pressed"]
