@@ -28,7 +28,6 @@
 | Movimiento | W/A/S/D |
 | Saltar / Doble Salto | Barra espaciadora |
 | Agacharse / Deslizarse | Ctrl o C |
-| Volar | F |
 | Dash | Click derecho del ratón |
 | Grapple / Gancho | Click izquierdo del ratón |
 | Zoom | Z |
