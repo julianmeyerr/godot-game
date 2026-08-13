@@ -17,7 +17,6 @@ La escena inicial configurada es `Menu/Main_menu.tscn`.
 | Saltar | Barra espaciadora |
 | Correr | Shift |
 | Agacharse / deslizarse | Ctrl o C |
-| Volar | F |
 | Dash | Boton derecho del raton |
 | Grapple | Boton izquierdo del raton |
 | Zoom | Z |
