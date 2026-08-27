@@ -19,7 +19,7 @@ class_name HUD
 @onready var slide_cooldown_label_text: Label = %SlideCooldownLabelText
 @onready var dash_cooldown_label_text: Label = %DashCooldownLabelText
 @onready var wallrun_time_label_text : Label = %WallrunTimeLabelText
-@onready var frames_per_second_label_text: Label = %FramesPerSecondLabelText
+@onready var timer_text: Label = %TimerText
 @onready var camera_rotation_label_text: Label = %CameraRotationLabelText
 @onready var current_fov_label_text: Label = %CurrentFOVLabelText
 @onready var camera_bob_vertical_offset_label_text: Label = %CameraBobVerticalOffsetLabelText
@@ -30,7 +30,7 @@ func _ready() -> void:
 		assert(false, "Player character reference for the hud is mandatory")
 
 func _process(_delta : float) -> void:
-	display_current_FPS()
+	display_current_runtime()
 	
 	display_properties()
 	
@@ -55,8 +55,9 @@ func display_properties() -> void:
 	current_fov_label_text.set_text(str(play_char.cam.fov))
 	camera_bob_vertical_offset_label_text.set_text(str(round_to_3_decimals(play_char.cam.v_offset)))
 	
-func display_current_FPS() -> void:
-	frames_per_second_label_text.set_text(str(Engine.get_frames_per_second()))
+func display_current_runtime() -> void:
+	#frames_per_second_label_text.set_text(str(Engine.get_frames_per_second()))
+	timer_text.set_text(GameManager.formated_time)
 	
 func display_speed_lines(value : bool) -> void:
 	speed_lines_container.visible = value

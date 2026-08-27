@@ -21,6 +21,7 @@ const RANKING_SCENE :="res://Menu/Ranking_menu.tscn"
 
 
 func _ready() -> void:
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	play_button.grab_focus()
 
 
@@ -59,5 +60,8 @@ func _on_controls_back_button_pressed() -> void:
 
 
 func _on_accept_button_pressed() -> void:
-	if name_input.text: get_tree().change_scene_to_file(GAME_SCENE);
-	else: error_message.visible = true
+	if name_input.text.strip_edges() != "":
+		GameManager.player_name = name_input.text.strip_edges()
+		get_tree().change_scene_to_file(GAME_SCENE)
+	else:
+		error_message.visible = true

@@ -6,6 +6,7 @@ const MAIN_MENU_SCENE := "res://Menu/Main_menu.tscn"
 @onready var ranking_list: VBoxContainer = %RankingList
 
 func _ready() -> void:
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	_load_ranking()
 
 func _load_ranking() -> void:

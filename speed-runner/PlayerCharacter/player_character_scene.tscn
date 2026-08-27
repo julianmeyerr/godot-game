@@ -168,7 +168,7 @@ debug_shape_custom_color = Color(0, 0.3372549, 0.7176471, 1)
 [node name="SlideFloorCheck" type="RayCast3D" parent="Raycasts" unique_id=1087156837]
 unique_name_in_owner = true
 exclude_parent = false
-target_position = Vector3(0, -4, 0)
+target_position = Vector3(0, -5, 0)
 debug_shape_custom_color = Color(0, 0.823529, 0.956863, 1)
 
 [node name="HUD" type="CanvasLayer" parent="." unique_id=2075974170 node_paths=PackedStringArray("play_char")]
@@ -202,6 +202,7 @@ grow_vertical = 2
 texture = ExtResource("16_gfbru")
 
 [node name="PlayerCharacterProperties" type="MarginContainer" parent="HUD" unique_id=1255810644]
+visible = false
 offset_right = 295.0
 offset_bottom = 376.0
 theme_override_constants/margin_left = 10
@@ -500,42 +501,28 @@ text = "..................."
 label_settings = ExtResource("14_gfbru")
 vertical_alignment = 1
 
-[node name="FPSProperties" type="MarginContainer" parent="HUD" unique_id=712875157]
+[node name="Timer" type="MarginContainer" parent="HUD" unique_id=712875157]
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -167.0
-offset_bottom = 33.0
+offset_left = -76.0
+offset_bottom = 43.0
 grow_horizontal = 0
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 
-[node name="PanelContainer" type="PanelContainer" parent="HUD/FPSProperties" unique_id=550517176]
+[node name="PanelContainer" type="PanelContainer" parent="HUD/Timer" unique_id=550517176]
 layout_mode = 2
 theme_override_styles/panel = ExtResource("18_ovq28")
 
-[node name="PlayCharInfos2" type="HBoxContainer" parent="HUD/FPSProperties/PanelContainer" unique_id=882322772]
+[node name="VBoxContainer2" type="VBoxContainer" parent="HUD/Timer/PanelContainer" unique_id=763008574]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HUD/FPSProperties/PanelContainer/PlayCharInfos2" unique_id=775626]
-layout_mode = 2
-
-[node name="FramesPerSecondLabel" type="Label" parent="HUD/FPSProperties/PanelContainer/PlayCharInfos2/VBoxContainer" unique_id=1472673247]
-texture_filter = 1
-layout_mode = 2
-theme_override_font_sizes/font_size = 40
-text = "Frames per seconds : "
-label_settings = ExtResource("14_gfbru")
-vertical_alignment = 1
-
-[node name="VBoxContainer2" type="VBoxContainer" parent="HUD/FPSProperties/PanelContainer/PlayCharInfos2" unique_id=763008574]
-layout_mode = 2
-
-[node name="FramesPerSecondLabelText" type="Label" parent="HUD/FPSProperties/PanelContainer/PlayCharInfos2/VBoxContainer2" unique_id=1198209949]
+[node name="TimerText" type="Label" parent="HUD/Timer/PanelContainer/VBoxContainer2" unique_id=1198209949]
 unique_name_in_owner = true
 texture_filter = 1
 layout_mode = 2
 theme_override_font_sizes/font_size = 40
-text = "....."
+text = "00:00:00"
 label_settings = ExtResource("14_gfbru")
 vertical_alignment = 1

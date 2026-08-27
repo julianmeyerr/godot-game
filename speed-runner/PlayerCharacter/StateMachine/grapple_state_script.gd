@@ -10,14 +10,14 @@ func enter(play_char_ref: CharacterBody3D) -> void:
 	play_char.grapple_active = true
 	play_char.set_vertical(play_char.velocity.y)
 	play_char.floor_snap_length = 0.0
-	play_char.hud.display_speed_lines(true)
+	play_char.nb_jumps_in_air_allowed = play_char.nb_jumps_in_air_allowed_ref
+
 
 func exit() -> void:
 	if play_char == null:
 		return
 	play_char.grapple_active = false
 	play_char.grapple_cooldown = play_char.grapple_cooldown_ref
-	play_char.hud.display_speed_lines(false)
 
 func physics_update(delta: float) -> void:
 	if Input.is_action_just_released(play_char.grapple_action):
@@ -100,6 +100,7 @@ func physics_update(delta: float) -> void:
 
 	play_char.set_horizontal(current_velocity)
 	play_char.set_vertical(current_velocity.y)
+
 func release() -> void:
 	# Al soltar se conserva exactamente la velocidad acumulada del balanceo.
 	# No se añade ningún impulso artificial que pueda cambiar su dirección.

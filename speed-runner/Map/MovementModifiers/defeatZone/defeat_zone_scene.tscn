@@ -1,0 +1,28 @@
+[gd_scene format=4]
+
+[ext_resource type="Script" path="res://Map/MovementModifiers/defeatZone/defeat_zone_script.gd" id="1_dzl"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_defeat"]
+albedo_color = Color(1, 0.2, 0.2, 0.45)
+transparency = 1
+emission_enabled = true
+emission = Color(1, 0.2, 0.2, 1)
+emission_energy_multiplier = 1.5
+
+[sub_resource type="BoxMesh" id="BoxMesh_defeat"]
+size = Vector3(4, 4, 4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_defeat"]
+size = Vector3(4, 4, 4)
+
+[node name="DefeatZone" type="Area3D"]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("1_dzl")
+
+[node name="DefeatMesh" type="MeshInstance3D" parent="."]
+material_override = SubResource("StandardMaterial3D_defeat")
+mesh = SubResource("BoxMesh_defeat")
+
+[node name="ZoneCollision" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_defeat")

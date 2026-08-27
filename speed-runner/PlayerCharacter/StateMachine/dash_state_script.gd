@@ -26,7 +26,7 @@ func verifications():
 	
 	dash_direction = (-play_char.cam.global_transform.basis.z).normalized()
 	
-	play_char.hud.display_speed_lines(true)
+	
 	
 	play_char.tween_hitbox_height(play_char.base_hitbox_height)
 	play_char.tween_model_height(play_char.base_model_height)
@@ -46,7 +46,7 @@ func applies(delta : float):
 		play_char.has_dashed = true
 		play_char.hud.display_speed_lines(false)
 		
-		play_char.nb_jumps_in_air_allowed = play_char. nb_jumps_in_air_allowed_ref
+		play_char.nb_jumps_in_air_allowed = play_char.nb_jumps_in_air_allowed_ref
 		
 		if play_char.is_on_floor():
 			transitioned.emit(self, "RunState")

@@ -18,7 +18,7 @@ var was_on_floor: bool
 @export var height_change_duration: float = 0.15
 
 @export_group("Jump variables")
-var jump_height: float = 2.0
+var jump_height: float = 3.0
 var jump_time_to_peak: float = 0.3
 var jump_time_to_fall: float = 0.25
 @export var jump_cooldown: float = 0.25
@@ -182,6 +182,9 @@ func _process(delta: float) -> void:
 		grapple_cooldown -= delta
 
 	jump_timer(delta)
+	
+	if speed>20: hud.display_speed_lines(true);
+	else: hud.display_speed_lines(false)
 
 func jump_timer(delta : float) -> void:
 	if jump_cooldown > 0.0:
@@ -290,7 +293,6 @@ func try_grapple() -> bool:
 	grapple_rope_length = global_position.distance_to(target)
 	return true
 
-	
 func set_vertical(new_vertical_v: float):
 	vertical_velocity = new_vertical_v
 	
