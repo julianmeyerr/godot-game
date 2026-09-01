@@ -6,6 +6,8 @@ class_name PlayerCharacter
 var input_direction: Vector2
 var move_direction: Vector3
 var desired_move_speed: float
+var active_speed_boost_multiplier: float = 1.0
+var speed_boost_time_remaining: float = 0.0
 @export var hit_ground_cooldown: float = 0.1 #amount of time the character keep his accumulated speed before losing it (while being on ground)
 var movement_acceleration_multiplier: float = 1.0
 var movement_deceleration_multiplier: float = 1.0
@@ -50,7 +52,7 @@ var can_wallrun : bool = true
 var side_check_raycast_collided : int = 0 #if -1, left side, if 1, right side
 var last_wallrunned_wall_out_of_time : int = 0 #if -1, left side, if 1, right side
 var wall_normal : Vector3 = Vector3.ZERO
-@export var wallrun_time : float = 3.5
+@export var wallrun_time : float = 4.5
 var wallrun_time_ref : float 
 @export var infinite_wallrun_time : bool = false
 @export var time_bef_can_wallrun_again : float = 0.2
@@ -59,10 +61,11 @@ var time_bef_can_wallrun_again_ref : float
 @export_group("Grapple variables")
 @export var grapple_max_distance: float = 45.0
 @export var grapple_min_distance: float = 5.0
+@export_flags_3d_physics var grapple_collision_mask: int = 16
 @export var grapple_reel_speed: float = 5.0
-@export var grapple_swing_acceleration: float = 22.0
+@export var grapple_swing_acceleration: float = 11.0
 @export var grapple_max_speed: float = 42.0
-@export var grapple_cooldown: float = 0.5
+@export var grapple_cooldown: float = 0.3
 var grapple_cooldown_ref: float
 var grapple_point: Vector3 = Vector3.ZERO
 var grapple_rope_length: float = 0.0
@@ -243,6 +246,8 @@ func tween_model_height(state_model_height : float) -> void:
 	model_tween.finished.connect(Callable(model_tween, "kill"))
 	
 func _physics_process(_delta: float) -> void:
+	update_speed_boost(_delta)
+
 	# Evita propagar NaN/INF al transform del CharacterBody y al renderer.
 	if !global_position.is_finite():
 		global_position = last_frame_position if last_frame_position.is_finite() else Vector3.ZERO
@@ -253,9 +258,13 @@ func _physics_process(_delta: float) -> void:
 
 	modify_physics_properties()
 	
+	var movement_multiplier := active_speed_boost_multiplier
 	speed = Vector2(velocity.x, velocity.z).length()
-	velocity = horizontal_velocity + Vector3.UP * vertical_velocity
+	velocity = horizontal_velocity * movement_multiplier + Vector3.UP * vertical_velocity
 	move_and_slide()
+	if movement_multiplier != 1.0:
+		velocity.x /= movement_multiplier
+		velocity.z /= movement_multiplier
 
 func gravity_apply(delta: float) -> void:
 	if is_on_floor():
@@ -272,13 +281,32 @@ func apply_horizontal(delta_v : Vector3):
 	delta_v.y = 0.0
 	horizontal_velocity += delta_v
 
+func apply_speed_boost(multiplier: float, duration: float) -> void:
+	if multiplier <= 0.0 or duration <= 0.0:
+		return
+	active_speed_boost_multiplier = multiplier
+	speed_boost_time_remaining = duration
+	if cam_holder.has_method("set_speed_boost_fov"):
+		cam_holder.call("set_speed_boost_fov", true)
+
+func update_speed_boost(delta: float) -> void:
+	if speed_boost_time_remaining <= 0.0:
+		return
+
+	speed_boost_time_remaining -= delta
+	if speed_boost_time_remaining <= 0.0:
+		speed_boost_time_remaining = 0.0
+		active_speed_boost_multiplier = 1.0
+		if cam_holder.has_method("set_speed_boost_fov"):
+			cam_holder.call("set_speed_boost_fov", false)
+
 func try_grapple() -> bool:
 	if !Input.is_action_just_pressed(grapple_action) or grapple_cooldown > 0.0 or grapple_active:
 		return false
 	var origin := cam.global_position
 	var direction := -cam.global_transform.basis.z
 	var query := PhysicsRayQueryParameters3D.create(origin, origin + direction * grapple_max_distance)
-	query.collision_mask = 1
+	query.collision_mask = grapple_collision_mask
 	query.exclude = [get_rid()]
 	var result := get_world_3d().direct_space_state.intersect_ray(query)
 

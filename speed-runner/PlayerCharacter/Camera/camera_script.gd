@@ -14,6 +14,8 @@ class_name CameraObject
 @export_group("fov variables")
 @export_range(0.0, 180.0, 0.01) var min_fov_val : float = 10.0
 @export_range(0.0, 180.0, 0.01) var max_fov_val : float = 170.0
+@export_range(0.0, 60.0, 1.0) var speed_boost_fov_offset : float = 10.0
+@export_range(0.0, 3.0, 0.01) var speed_boost_fov_duration : float = 0.15
 @export var cam_fov_per_state : Dictionary[String, Vector2] = {
 	#fov value, durationz
 	"Default" : Vector2(90.0, 0.2),
@@ -73,6 +75,7 @@ var default_input_actions : Dictionary
 
 var state : String
 var move_speed : float
+var speed_boost_fov_active: bool = false
 
 #references variables
 @onready var camera : Camera3D = $Camera
@@ -248,12 +251,12 @@ func change_fov() -> void:
 	
 	if !zoom_on and !zoom_has_occured:
 		if state != null and state != "Jump" and state != "Inair" and state != "Wallrun":
-			fov_change_tween.tween_property(camera, "fov", cam_fov_per_state[state][0], cam_fov_per_state[state][1])
+			fov_change_tween.tween_property(camera, "fov", get_fov_with_speed_boost(cam_fov_per_state[state][0]), cam_fov_per_state[state][1])
 			fov_change_tween.finished.connect(Callable(fov_change_tween, "kill"))
 		else:
 			#default value used for case like this one, when you need to force a fov change for a state that doesn't have his own setted fov
 			if state != "Jump" and state != "Inair" and state != "Wallrun":
-				fov_change_tween.tween_property(camera, "fov", cam_fov_per_state["Default"][0], cam_fov_per_state["Default"][1])
+				fov_change_tween.tween_property(camera, "fov", get_fov_with_speed_boost(cam_fov_per_state["Default"][0]), cam_fov_per_state["Default"][1])
 				fov_change_tween.finished.connect(Callable(fov_change_tween, "kill"))
 			else:
 				#not a great piece of code, but that's the most effective and simple way a found to solve the issue
@@ -261,7 +264,7 @@ func change_fov() -> void:
 				#the fov would go back to the default one, even if play char jump with the Run state fov
 				
 				var movement_state := "Run" if play_char.speed > 1.0 else "Idle"
-				fov_change_tween.tween_property(camera, "fov", cam_fov_per_state[movement_state][0], cam_fov_per_state[movement_state][1])
+				fov_change_tween.tween_property(camera, "fov", get_fov_with_speed_boost(cam_fov_per_state[movement_state][0]), cam_fov_per_state[movement_state][1])
 				fov_change_tween.finished.connect(Callable(fov_change_tween, "kill"))
 				
 	#doesn't set zoom boolean to false right now, because we want the zoom to occur whatever the current state of play char is
@@ -269,6 +272,31 @@ func change_fov() -> void:
 		zoom_has_occured = true
 		fov_change_tween.tween_property(camera, "fov", camera.fov - zoom_val, zoom_duration)
 		fov_change_tween.finished.connect(Callable(fov_change_tween, "kill"))
+
+func get_fov_with_speed_boost(base_fov: float) -> float:
+	if speed_boost_fov_active:
+		return clamp(base_fov + speed_boost_fov_offset, min_fov_val, max_fov_val)
+	return base_fov
+
+func set_speed_boost_fov(enabled: bool) -> void:
+	speed_boost_fov_active = enabled
+	if zoom_has_occured:
+		return
+
+	var target_fov: float
+	if enabled:
+		var current_state: String = str(play_char.state_machine.curr_state_name)
+		var base_fov: float = cam_fov_per_state["Default"][0]
+		if cam_fov_per_state.has(current_state):
+			base_fov = cam_fov_per_state[current_state][0]
+		target_fov = get_fov_with_speed_boost(base_fov)
+	else:
+		change_fov()
+		return
+
+	var fov_tween: Tween = get_tree().create_tween()
+	fov_tween.tween_property(camera, "fov", target_fov, speed_boost_fov_duration)
+	fov_tween.finished.connect(Callable(fov_tween, "kill"))
 		
 func mouse_mode() -> void:
 	#manage the mouse mode (visible = can use mouse on the screen, captured = mouse not visible and locked in at the center of the screen)

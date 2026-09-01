@@ -30,7 +30,8 @@ func physics_update(delta : float) -> void:
 	
 	play_char.gravity_apply(delta)
 	
-	input_management()
+	if input_management():
+		return
 	
 	move(delta)
 	
@@ -53,10 +54,10 @@ func applies(delta : float) -> void:
 			if play_char.move_direction: transitioned.emit(self, "RunState")
 			else: transitioned.emit(self, "IdleState")
 		
-func input_management() -> void:
+func input_management() -> bool:
 	if play_char.try_grapple():
 		transitioned.emit(self, "GrappleState")
-		return
+		return true
 
 	if Input.is_action_just_pressed(play_char.jump_action):
 		#check if can jump buffer
@@ -65,19 +66,26 @@ func input_management() -> void:
 		if play_char.was_on_floor and play_char.coyote_jump_cooldown > 0.0 and play_char.last_frame_position.y > play_char.position.y and play_char.jump_cooldown <= 0.0:
 			play_char.coyote_jump_on = true
 			transitioned.emit(self, "JumpState")
+			return true
 		if play_char.jump_cooldown <= 0.0:
 			transitioned.emit(self, "JumpState")
+			return true
 		
 	if Input.is_action_just_pressed(play_char.dash_action):
 		if play_char.time_bef_can_dash_again <= 0.0:
 			transitioned.emit(self, "DashState")
+			return true
 		
 	if Input.is_action_just_pressed(play_char.fly_action):
 		transitioned.emit(self, "FlyState")
+		return true
 		
 	if Input.is_action_just_pressed(play_char.slide_action):
 		if play_char.slide_floor_check.is_colliding() and play_char.last_frame_position.y > play_char.position.y and  play_char.time_bef_can_slide_again <= 0.0:
 			play_char.slide_buff_on = true
+			return true
+
+	return false
 			
 func wall_check() -> void:
 	if play_char.can_wallrun and (!play_char.is_on_floor() or play_char.is_on_wall()) and !play_char.wallrun_floor_check.is_colliding():

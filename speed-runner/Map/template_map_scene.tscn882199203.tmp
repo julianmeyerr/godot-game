@@ -43,9 +43,6 @@ _data = {
 }
 point_count = 2
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8xt4j"]
-albedo_color = Color(0.13998836, 0.37157592, 1, 1)
-
 [node name="TemplateMap" type="Node3D" unique_id=1708358735]
 script = ExtResource("1_map")
 
@@ -410,25 +407,22 @@ path_joined = false
 material = ExtResource("4_ivwfa")
 
 [node name="CSGBox3D11" type="CSGBox3D" parent="Map" unique_id=2032733094]
-transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 51.64446, 29.676172, -49.834415)
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 51.64446, 30.621695, -49.834415)
 use_collision = true
-collision_layer = 17
+collision_layer = 32769
 collision_mask = 2
-material = SubResource("StandardMaterial3D_8xt4j")
 
 [node name="CSGBox3D12" type="CSGBox3D" parent="Map" unique_id=1076001817]
-transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 51.64446, 35.391045, -106.84657)
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 51.64446, 35.391045, -106.84657)
 use_collision = true
-collision_layer = 17
+collision_layer = 32769
 collision_mask = 2
-material = SubResource("StandardMaterial3D_8xt4j")
 
 [node name="CSGBox3D13" type="CSGBox3D" parent="Map" unique_id=93790741]
-transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 51.644, 40.548958, -156.847)
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 51.644, 40.548958, -156.847)
 use_collision = true
-collision_layer = 17
+collision_layer = 32769
 collision_mask = 2
-material = SubResource("StandardMaterial3D_8xt4j")
 
 [node name="GoalZone" parent="Map" unique_id=998877665 instance=ExtResource("1_goal")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26.7646, 2, -5)
