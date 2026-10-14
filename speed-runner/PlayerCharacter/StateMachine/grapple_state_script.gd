@@ -11,6 +11,7 @@ func enter(play_char_ref: CharacterBody3D) -> void:
 	play_char.set_vertical(play_char.velocity.y)
 	play_char.floor_snap_length = 0.0
 	play_char.nb_jumps_in_air_allowed = play_char.nb_jumps_in_air_allowed_ref
+	play_char.cam_holder.call("trigger_grapple_attach_juice")
 
 
 func exit() -> void:
@@ -104,4 +105,5 @@ func physics_update(delta: float) -> void:
 func release() -> void:
 	# Al soltar se conserva exactamente la velocidad acumulada del balanceo.
 	# No se añade ningún impulso artificial que pueda cambiar su dirección.
+	play_char.cam_holder.call("trigger_grapple_release_juice")
 	transitioned.emit(self, "InairState")

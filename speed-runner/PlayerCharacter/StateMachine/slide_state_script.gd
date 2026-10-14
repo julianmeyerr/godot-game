@@ -31,6 +31,7 @@ func enter(play_char_ref : CharacterBody3D) -> void:
 	play_char = play_char_ref
 	
 	verifications()
+	play_char.cam_holder.call("trigger_slide_juice")
 	
 func verifications() -> void:
 	

@@ -8,6 +8,8 @@
 [ext_resource type="Material" uid="uid://3ub3li5nvjsw" path="res://Map/Materials/not_floor_structure_material.tres" id="4_ivwfa"]
 [ext_resource type="PackedScene" path="res://Map/Destructible/destructible_object_scene.tscn" id="5_destructible"]
 [ext_resource type="PackedScene" uid="uid://c6j1tl186sgk0" path="res://Map/Enemy/stationary_enemy_scene.tscn" id="6_enemy"]
+[ext_resource type="PackedScene" path="res://Map/MovementModifiers/movingPlatform/moving_platform_scene.tscn" id="7_moving_platform"]
+[ext_resource type="PackedScene" path="res://Menu/Pause_menu.tscn" id="8_pause"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_fjbi6"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -65,6 +67,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26.7646, 1.50542, -19.959)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.8408585, 0)
 grapple_max_distance = 30.0
 
+[node name="PauseMenu" parent="." instance=ExtResource("8_pause")]
+
 [node name="DestructibleObjects" type="Node3D" parent="." unique_id=933735438]
 
 [node name="DestructibleObject" parent="DestructibleObjects" unique_id=334925603 instance=ExtResource("5_destructible")]
@@ -85,6 +89,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26.7646, 1, -30)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32.7646, 1, -30)
 
 [node name="Map" type="Node3D" parent="." unique_id=270084263]
+
+[node name="MovingPlatform" parent="Map" unique_id=1006475414 instance=ExtResource("7_moving_platform")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26.7646, 6.225191, -17.98957)
 
 [node name="CSGBox3D" type="CSGBox3D" parent="Map" unique_id=1680397417]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 68.29639, 0, -89.14499)
@@ -410,7 +417,7 @@ path_joined = false
 material = ExtResource("4_ivwfa")
 
 [node name="CSGBox3D11" type="CSGBox3D" parent="Map" unique_id=2032733094]
-transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 51.64446, 29.676172, -49.834415)
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 51.64446, 30.513784, -49.834415)
 use_collision = true
 collision_layer = 17
 collision_mask = 2
@@ -435,3 +442,4 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26.7646, 2, -5)
 
 [node name="DefeatZone" parent="Map" unique_id=998877666 instance=ExtResource("1_defeat")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26.7646, 2, 8)
+auto_retry = true

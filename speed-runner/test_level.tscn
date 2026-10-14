@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://c6j1tl186sgk0" path="res://Map/Enemy/stationary_enemy_scene.tscn" id="6_gbhdq"]
 [ext_resource type="Material" uid="uid://3ub3li5nvjsw" path="res://Map/Materials/not_floor_structure_material.tres" id="7_y646j"]
 [ext_resource type="PackedScene" path="res://Map/MovementModifiers/goalZone/goal_zone_scene.tscn" id="8_lnbra"]
+[ext_resource type="PackedScene" path="res://Map/MovementModifiers/defeatZone/defeat_zone_scene.tscn" id="9_6emce"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_f7g2b"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -347,5 +348,8 @@ material = SubResource("StandardMaterial3D_w0fhg")
 
 [node name="GoalZone" parent="." unique_id=699454674 instance=ExtResource("8_lnbra")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 655.90894, 4.527, -74.968346)
+
+[node name="DefeatZone" parent="." unique_id=197904437 instance=ExtResource("9_6emce")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0534344, 2.5, -9.058372)
 
 [editable path="StationaryEnemy"]

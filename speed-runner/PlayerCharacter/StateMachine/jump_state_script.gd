@@ -153,6 +153,7 @@ func jump() -> void:
 		if is_double_jump:
 			redirect_double_jump()
 		play_char.set_vertical(jump_velocity + jump_force_additions)
+		play_char.cam_holder.call("trigger_jump_juice", is_double_jump)
 		can_jump = false
 
 func redirect_double_jump() -> void:
@@ -180,5 +181,6 @@ func walljump() -> void:
 	#applies the calculated wall jump speed
 	play_char.set_horizontal(new_horizontal_velocity)
 	play_char.set_vertical(jump_velocity * 0.8)
+	play_char.cam_holder.call("trigger_jump_juice", true)
 
 	play_char.walljump_lock_in_air_movement_time = play_char.walljump_lock_in_air_movement_time_ref

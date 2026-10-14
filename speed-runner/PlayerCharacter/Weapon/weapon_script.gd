@@ -22,7 +22,6 @@ func _physics_process(delta: float) -> void:
 		shoot()
 
 func shoot() -> void:
-	print("shoot")
 	cooldown_remaining = fire_cooldown
 
 	var origin := camera.global_position
@@ -36,12 +35,16 @@ func shoot() -> void:
 	if result.is_empty():
 		return
 
-	_apply_damage(result["collider"])
+	if _apply_damage(result["collider"]):
+		var hud := player.get_node_or_null("HUD")
+		if hud != null and hud.has_method("show_hit_feedback"):
+			hud.call("show_hit_feedback")
 
-func _apply_damage(collider: Object) -> void:
+func _apply_damage(collider: Object) -> bool:
 	var target := collider as Node
 	while target != null:
 		if target.has_method("take_damage"):
 			target.take_damage(damage, player)
-			return
+			return true
 		target = target.get_parent()
+	return false

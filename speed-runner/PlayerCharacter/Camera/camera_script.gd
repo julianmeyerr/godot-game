@@ -63,6 +63,19 @@ var last_input_y : float
 @export_range(0.0, 15.0, 0.1) var cam_v_offset_to_0_speed : float = 1.0
 var step_timer : float = 0.0
 
+@export_group("Movement Juice")
+@export_range(30.0, 240.0, 1.0) var juice_spring_strength: float = 120.0
+@export_range(5.0, 40.0, 0.5) var juice_spring_damping: float = 20.0
+@export_range(0.0, 0.3, 0.01) var slide_camera_lowering: float = 0.12
+@export_range(1.0, 30.0, 0.5) var slide_camera_transition_speed: float = 12.0
+var camera_base_position: Vector3
+var camera_base_roll: float
+var camera_juice_offset: Vector3 = Vector3.ZERO
+var camera_juice_velocity: Vector3 = Vector3.ZERO
+var camera_juice_roll: float = 0.0
+var camera_juice_roll_velocity: float = 0.0
+var slide_camera_offset: float = 0.0
+
 @export_group("Mouse variables")
 var mouse_free : bool = false
 
@@ -76,6 +89,7 @@ var default_input_actions : Dictionary
 var state : String
 var move_speed : float
 var speed_boost_fov_active: bool = false
+var camera_pitch: float = 0.0
 
 #references variables
 @onready var camera : Camera3D = $Camera
@@ -87,6 +101,9 @@ func _ready() -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED) #set mouse mode as captured
 	
 	camera.fov = fov
+	camera_pitch = camera.rotation.x
+	camera_base_position = camera.position
+	camera_base_roll = camera.rotation.z
 	if state_machine.has_signal("change_fov"):
 		state_machine.connect("change_fov", Callable(self, "change_fov"))
 	
@@ -131,9 +148,14 @@ func _unhandled_input(event) -> void:
 	#manage camera rotation (360 on x axis, blocked at specified values on y axis, to not having the character do a complete head turn, which will be kinda weird)
 	if event is InputEventMouseMotion:
 		rotate_y(-event.relative.x * (x_axis_sensibility / 10))
-		camera.rotate_x(-event.relative.y * (y_axis_sensibility / 10))
-		#use of deg_to_rad, because we change the x axis rotation with rotation,x, which use radians instead of degrees
-		camera.rotation.x = clamp(camera.rotation.x, deg_to_rad(max_up_angle_view), deg_to_rad(max_down_angle_view))
+		var min_pitch := maxf(deg_to_rad(max_up_angle_view), deg_to_rad(-89.0))
+		var max_pitch := minf(deg_to_rad(max_down_angle_view), deg_to_rad(89.0))
+		camera_pitch = clampf(
+			camera_pitch - event.relative.y * (y_axis_sensibility / 10.0),
+			min_pitch,
+			max_pitch
+		)
+		camera.rotation.x = camera_pitch
 		
 func _process(delta : float) -> void:
 	state = play_char.state_machine.curr_state_name
@@ -141,6 +163,7 @@ func _process(delta : float) -> void:
 	tilt(delta)
 	
 	bob(delta)
+	_update_movement_juice(delta)
 	
 	zoom()
 	
@@ -228,6 +251,83 @@ func bob(delta : float) -> void:
 		#smoothly reset position vertical offset
 		#if not applied, the camera can be upper the play char body for listed above states, resulting in wrong view
 		if camera.v_offset != 0.0: camera.v_offset = move_toward(camera.v_offset, 0.0, cam_v_offset_to_0_speed * delta)
+
+func _update_movement_juice(delta: float) -> void:
+	camera_juice_velocity += -camera_juice_offset * juice_spring_strength * delta
+	camera_juice_velocity *= exp(-juice_spring_damping * delta)
+	camera_juice_offset += camera_juice_velocity * delta
+	camera_juice_roll_velocity += -camera_juice_roll * juice_spring_strength * delta
+	camera_juice_roll_velocity *= exp(-juice_spring_damping * delta)
+	camera_juice_roll += camera_juice_roll_velocity * delta
+
+	camera_juice_offset.x = clampf(camera_juice_offset.x, -0.1, 0.1)
+	camera_juice_offset.y = clampf(camera_juice_offset.y, -0.12, 0.12)
+	camera_juice_offset.z = clampf(camera_juice_offset.z, -0.1, 0.1)
+	camera_juice_roll = clampf(camera_juice_roll, deg_to_rad(-4.0), deg_to_rad(4.0))
+
+	var target_slide_offset := -slide_camera_lowering if state == "Slide" else 0.0
+	var slide_blend := 1.0 - exp(-slide_camera_transition_speed * delta)
+	slide_camera_offset = lerpf(slide_camera_offset, target_slide_offset, slide_blend)
+	camera.position = camera_base_position + camera_juice_offset + Vector3.UP * slide_camera_offset
+	camera.rotation.z = camera_base_roll + camera_juice_roll
+
+func _add_movement_impulse(position_velocity: Vector3, roll_velocity: float = 0.0) -> void:
+	if not position_velocity.is_finite() or not is_finite(roll_velocity):
+		return
+	camera_juice_velocity = (camera_juice_velocity + position_velocity).limit_length(1.6)
+	camera_juice_roll_velocity = clampf(
+		camera_juice_roll_velocity + roll_velocity,
+		deg_to_rad(-35.0),
+		deg_to_rad(35.0)
+	)
+
+func trigger_landing_juice(impact_speed: float) -> void:
+	if not is_finite(impact_speed):
+		return
+	var strength := clampf((impact_speed - 3.0) / 15.0, 0.0, 1.0)
+	strength = strength * strength * (3.0 - 2.0 * strength)
+	if strength <= 0.01:
+		return
+
+	var lateral_ratio := 0.0
+	if play_char.speed > 0.1:
+		lateral_ratio = clampf(play_char.velocity.dot(global_basis.x) / play_char.speed, -1.0, 1.0)
+	_add_movement_impulse(Vector3(0.0, -0.85 * strength, 0.0), deg_to_rad(18.0) * lateral_ratio * strength)
+
+func trigger_jump_juice(is_double_jump: bool = false) -> void:
+	var strength := 1.4 if is_double_jump else 1.0
+	_add_movement_impulse(Vector3(0.0, -0.18 * strength, 0.08 * strength))
+
+func trigger_dash_juice(direction: Vector3) -> void:
+	if not direction.is_finite():
+		return
+	var local_direction := global_basis.inverse() * direction.normalized()
+	_add_movement_impulse(
+		Vector3(-local_direction.x * 0.2, -0.16, 0.5),
+		-local_direction.x * deg_to_rad(8.0)
+	)
+
+func trigger_slide_juice() -> void:
+	_add_movement_impulse(Vector3(0.0, -0.24, 0.16))
+
+func trigger_wallrun_juice(side: int) -> void:
+	_add_movement_impulse(Vector3(-float(side) * 0.3, -0.04, 0.0))
+
+func trigger_grapple_attach_juice() -> void:
+	_add_movement_impulse(Vector3(0.0, 0.06, 0.35))
+
+func trigger_grapple_release_juice() -> void:
+	if not play_char.velocity.is_finite():
+		return
+	var local_velocity := global_basis.inverse() * play_char.velocity
+	var release_strength := minf(local_velocity.length() * 0.01, 0.4)
+	var lateral_ratio := 0.0
+	if local_velocity.length() > 0.1:
+		lateral_ratio = local_velocity.x / local_velocity.length()
+	_add_movement_impulse(
+		-local_velocity.normalized() * release_strength,
+		-deg_to_rad(8.0) * lateral_ratio
+	)
 		
 func zoom() -> void:
 	if Input.is_action_just_pressed(zoom_action):

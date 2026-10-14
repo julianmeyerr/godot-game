@@ -2,7 +2,8 @@ extends Node
 
 const RANKING_PATH := "user://ranking.json"
 const VICTORY_SCENE := "res://Menu/Victory_menu.tscn"
-const DEFEAT_SCENE := "res://Menu/Defeat_menu.tscn"
+const MAIN_MENU_SCENE := "res://Menu/Main_menu.tscn"
+const GAME_SCENE := "res://Map/template_map_scene.tscn"
 
 var player_name: String = ""
 var run_time: float = 0.0
@@ -39,26 +40,30 @@ func finish_run() -> void:
 
 	get_tree().change_scene_to_file(VICTORY_SCENE)
 
-func defeat() -> void:
+func defeat(auto_retry: bool = false) -> void:
 	waiting_to_start = false
 	is_running = false
-	get_tree().change_scene_to_file(DEFEAT_SCENE)
+	var destination := GAME_SCENE if auto_retry else MAIN_MENU_SCENE
+	get_tree().change_scene_to_file(destination)
 
 func _process(delta: float) -> void:
-	if waiting_to_start and _player_moved():
+	if get_tree().paused:
+		return
+	if waiting_to_start and _player_made_action():
 		waiting_to_start = false
 		is_running = true
 	if is_running:
 		run_time += delta
 	formated_time = format_time(run_time)
 
-func _player_moved() -> bool:
-	return Input.is_action_pressed("play_char_move_forward") \
-		or Input.is_action_pressed("play_char_move_backward") \
-		or Input.is_action_pressed("play_char_move_left") \
-		or Input.is_action_pressed("play_char_move_right") \
-		or Input.is_action_pressed("play_char_jump") \
-		or Input.is_action_pressed("play_char_dash")
+func _player_made_action() -> bool:
+	for action in InputMap.get_actions():
+		var action_name := str(action)
+		if not action_name.begins_with("play_char_") or action_name == "play_char_mouse_mode":
+			continue
+		if Input.is_action_just_pressed(action_name):
+			return true
+	return false
 
 func _sort_by_time(a: Dictionary, b: Dictionary) -> bool:
 	return a["time"] < b["time"]

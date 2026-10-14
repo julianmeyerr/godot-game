@@ -65,7 +65,8 @@ SHIFT: correr
 C: agacharse / deslizarse
 CTRL: dash
 Q: grapple
-Click izquierdo: disparar"
+Click izquierdo: disparar
+P: pausa"
 horizontal_alignment = 1
 
 [node name="ControlsBackButton" type="Button" parent="CenterContainer/ControlsPanel" unique_id=394723596]

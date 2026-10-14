@@ -25,6 +25,7 @@ func verifications():
 	#play_char.dash_direction = play_char.move_direction.normalized() #get move direction before actually start dashing, and stick to that direction
 	
 	dash_direction = (-play_char.cam.global_transform.basis.z).normalized()
+	play_char.cam_holder.call("trigger_dash_juice", dash_direction)
 	
 	
 	
@@ -44,7 +45,6 @@ func applies(delta : float):
 		#reset velocity on x and z axis
 		play_char.set_horizontal(velocity_pre_dash)
 		play_char.has_dashed = true
-		play_char.hud.display_speed_lines(false)
 		
 		play_char.nb_jumps_in_air_allowed = play_char.nb_jumps_in_air_allowed_ref
 		

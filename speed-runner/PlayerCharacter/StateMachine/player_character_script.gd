@@ -186,8 +186,6 @@ func _process(delta: float) -> void:
 
 	jump_timer(delta)
 	
-	if speed>20: hud.display_speed_lines(true);
-	else: hud.display_speed_lines(false)
 
 func jump_timer(delta : float) -> void:
 	if jump_cooldown > 0.0:
@@ -262,6 +260,8 @@ func _physics_process(_delta: float) -> void:
 	speed = Vector2(velocity.x, velocity.z).length()
 	velocity = horizontal_velocity * movement_multiplier + Vector3.UP * vertical_velocity
 	move_and_slide()
+	if not was_on_floor and is_on_floor():
+		cam_holder.call("trigger_landing_juice", maxf(-last_frame_velocity.y, 0.0))
 	if movement_multiplier != 1.0:
 		velocity.x /= movement_multiplier
 		velocity.z /= movement_multiplier
@@ -286,6 +286,8 @@ func apply_speed_boost(multiplier: float, duration: float) -> void:
 		return
 	active_speed_boost_multiplier = multiplier
 	speed_boost_time_remaining = duration
+	if hud.has_method("show_speed_boost_feedback"):
+		hud.call("show_speed_boost_feedback")
 	if cam_holder.has_method("set_speed_boost_fov"):
 		cam_holder.call("set_speed_boost_fov", true)
 
